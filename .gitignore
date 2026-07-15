@@ -1,0 +1,15 @@
+# Ignore Python virtual environments
+venv/
+venv1/
+sql_env/
+
+# Ignore local system files
+.DS_Store
+Thumbs.db
+
+# Ignore local caches
+__pycache__/
+*.pyc
+
+# Optional: Ignore the large generated data output file
+# sql_exercise_outputs.xlsx
