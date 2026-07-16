@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, text
 # 1. Database Connection Configuration
 # Adjust user, password, host, and port to match your local PostgreSQL setup
 DB_USER = "postgres"
-DB_PASS = "aadrika"  
+DB_PASS = "your_password"  
 DB_HOST = "localhost"
 DB_PORT = "5432"
 DB_NAME = "dvdrental"
