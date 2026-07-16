@@ -1,11 +1,11 @@
 import pandas as pd
 import psycopg2
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 # 1. Database Connection Configuration
 # Adjust user, password, host, and port to match your local PostgreSQL setup
 DB_USER = "postgres"
-DB_PASS = "aadrika"  # 
+DB_PASS = "aadrika"  
 DB_HOST = "localhost"
 DB_PORT = "5432"
 DB_NAME = "dvdrental"
@@ -49,7 +49,8 @@ print("🚀 Starting automated SQL workbook compiler pipeline...")
 
 try:
     # Initialize the high-level Excel output engine 
-    with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+    with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
+
         
         # Connect directly via psycopg2 connection wrapper to run setups + temp tables seamlessly
         with engine.connect() as connection:
@@ -59,8 +60,10 @@ try:
             trans = connection.begin()
             try:
                 # Pre-run required setup items to build views/tables safely
+                # Pre-run required setup items to build views/tables safely
                 for setup_key in ["Q12_SETUP", "Q13_SETUP", "Q14_SETUP"]:
-                    connection.execute(setup_key)
+                    connection.execute(text(queries[setup_key]))
+
                 
                 # Fetch and export structured queries to targeted sheets
                 for q_num in range(1, 15):
@@ -70,7 +73,8 @@ try:
                     print(f"📊 Compiling dataset sheet: {sheet_name}...")
                     
                     # Feed database records straight into a Pandas DataFrame
-                    df = pd.read_sql_query(sql_query, connection)
+                    df = pd.read_sql_query(text(sql_query), connection)
+
                     
                     # Write rows into dedicated target Excel tab
                     df.to_excel(writer, sheet_name=sheet_name, index=False)
